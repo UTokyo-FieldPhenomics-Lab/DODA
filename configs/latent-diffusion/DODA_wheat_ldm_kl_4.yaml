@@ -46,7 +46,7 @@ model:
       params:
         embed_dim: 3
         monitor: "val/rec_loss"
-        ckpt_path: "kl-f4/kl-f4-wheat.ckpt"
+        ckpt_path: "kl-f4-wheat.ckpt"
         ddconfig:
           double_z: True
           z_channels: 3
