@@ -25,7 +25,7 @@ output_path = 'datasets/random_layout/'
 # If you want to randomly generate the length and width of bboxes, set use_wh_from_target_domain to False,
 # and set the base_w, base_h, w_scale, h_scase
 use_wh_from_target_domain = True
-ann_Path = 'competition_test.csv'
+ann_Path = 'datasets/gwhd_2021/competition_test.csv'
 base_w = 55
 base_h = 50
 w_scale = (0.15, 2)

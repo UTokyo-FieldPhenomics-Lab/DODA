@@ -18,10 +18,10 @@ from transformers import AutoImageProcessor
 
 
 #Reference images path of target domain
-ref_img_path = 'gwhd_2021/Terraref_x9/'
+ref_img_path = 'datasets/gwhd_2021/Terraref_x9/'
 
 output_path = 'output/wheat/Terraref-testing/'
-weight = "models/DODA-wheat-Terraref.ckpt"
+weight = "models/DODA-wheat-cldm.ckpt"
 
 seed = 21
 batch_size = 8

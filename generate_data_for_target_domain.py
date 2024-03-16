@@ -17,7 +17,7 @@ from transformers import AutoImageProcessor
 
 
 #Reference images path of target domain
-ref_img_path = 'gwhd_2021/Terraref_x9/target/'
+ref_img_path = 'datasets/gwhd_2021/Terraref_x9/target/'
 assert os.path.exists(ref_img_path), f"The folder '{ref_img_path}' does not exist. Please run 'generate_Terraref_testimg.py' to get the reference images first."
 #Layout images path 
 layout_path = 'datasets/random_layout/'
@@ -26,24 +26,23 @@ assert os.path.exists(layout_path), f"The folder '{layout_path}' does not exist.
 output_path = 'output/wheat/Terraref-data/'
 
 #Names of reference images that containing the detection target: wheat heads
-names_img_with_wheat = "gwhd_2021/Terraref_x9/with_wheat.txt"
+names_img_with_wheat = "datasets/gwhd_2021/Terraref_x9/with_wheat.txt"
 #Names of reference images that NOT containing the detection target: wheat heads
-names_img_wo_wheat = "gwhd_2021/Terraref_x9/wo_wheat.txt"
+names_img_wo_wheat = "datasets/gwhd_2021/Terraref_x9/wo_wheat.txt"
 
+
+n_img = 800   # The number of images that need to be generated
 seed = 21
 batch_size = 8
 img_resolution = 512
 configs = 'configs/controlnet/DODA_wheat_cldm_kl_4.yaml'
-weight = "models/DODA-wheat-Terraref.ckpt"
-
+weight = "models/DODA-wheat-cldm.ckpt"
 
 
 layout_img_path = layout_path + 'img/'
 label_path = layout_path + 'bounding_boxes.txt'
 
 seed_everything(seed)
-
-
 
 
             
@@ -92,13 +91,16 @@ makedir(output_ctr_path)
 
 
 
-
-
 # Get the labels
 label_dic = {}
 imgnames_list = []
 with open(label_path) as f:
     label_lines = f.readlines()
+    try: 
+        label_lines = label_lines[:n_img]
+    except:
+        print('The number of images to be generated is greater than the number of layout images')
+        print('please use "random_generate_layout_images.py" to generate more layout images')
     for label_line in label_lines:
         label_line = label_line.rstrip()
         label_line = label_line.split(' ')

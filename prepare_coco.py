@@ -9,7 +9,7 @@ from utils.utils import makedir
 
 #Path of COCO
 dataDir = 'datasets/coco'
-dataTypes = ['train2017', 'val2017']  # 'train2017' for training, 'val2017' for testing
+dataTypes = ['val2017'] 
 
 p = inflect.engine()
 

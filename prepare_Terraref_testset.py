@@ -7,14 +7,16 @@ from tqdm import tqdm
 from utils.utils import read_label, makedir, get_layout_image
 
 #Path of Global Wheat Head Detection Dataset
-gwhd_2021_path = 'gwhd_2021/'
+gwhd_2021_path = 'datasets/gwhd_2021/'
+
+
 
 #Path to save the images of Terraref domain
-Terraref_path = 'gwhd_2021/Terraref/target/'
+Terraref_path = 'datasets/gwhd_2021/Terraref/target/'
 makedir(Terraref_path)
-Terraref_ori_source_path = 'gwhd_2021/Terraref/source/'
+Terraref_ori_source_path = 'datasets/gwhd_2021/Terraref/source/'
 makedir(Terraref_ori_source_path)
-Terraref_cut_Path = 'gwhd_2021/Terraref_x9/'
+Terraref_cut_Path = 'datasets/gwhd_2021/Terraref_x9/'
 makedir(Terraref_cut_Path)
 Terraref_source_Path = Terraref_cut_Path + 'source/'
 makedir(Terraref_source_Path)
@@ -25,6 +27,8 @@ makedir(Terraref_target_Path)
 gwhd_2021_img_path = gwhd_2021_path + 'images/'
 csvFiles = gwhd_2021_path + 'competition_test.csv'
 Terraref_label = open(Terraref_cut_Path + 'label_x9.txt', 'w', encoding='utf-8')
+names_img_with_wheat = open(Terraref_cut_Path + 'with_wheat.txt', 'w', encoding='utf-8')
+names_img_wo_wheat = open(Terraref_cut_Path + 'wo_wheat.txt', 'w', encoding='utf-8')
 
 #read labels of testset 
 label_dic = read_label(csvFiles)
@@ -83,11 +87,18 @@ for imgName in tqdm(os.listdir(Terraref_path)):
                     bbox[:, 3][bbox[:, 3]>511] = 511
 
                     bboxes = bbox[np.logical_and((bbox[:, 2] - bbox[:, 0])>10, (bbox[:, 3] - bbox[:, 1])>10)] # discard invalid box 
-
-                    for bbox in bboxes:
-                        bbox = ','.join(map(str, bbox))
-                        Terraref_label.write(' ' + bbox + ',0')
+                    if bboxes.shape[0] > 0:
+                        names_img_with_wheat.write('%s.png'%(imgName + '_' + str(i)) + '\n')
+                        for bbox in bboxes:
+                            bbox = ','.join(map(str, bbox))
+                            Terraref_label.write(' ' + bbox + ',0')
+                    else:
+                        names_img_wo_wheat.write('%s.png'%(imgName + '_' + str(i)) + '\n')
+                else:
+                    names_img_wo_wheat.write('%s.png'%(imgName + '_' + str(i)) + '\n')
 
                 Terraref_label.write('\n')
+
+                
 
                 i += 1
