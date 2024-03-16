@@ -32,10 +32,10 @@ python prepare_Terraref_testset.py
 
 ### Generate Images for Evaluation
 Generate images according to the bounding boxes of the COCO 2017 validation set:
-    python generate_coco_testimg.py
+        python generate_coco_testimg.py
 
 Generate images according to the bounding boxes and reference images of the Terraref domain:
-    python prepare_Terraref_testset.py
+        python prepare_Terraref_testset.py
 
 
 If you want to generate data to train the detector, first generate layout images using `random_generate_layout_images.py`, then use `generate_data_for_target_domain.py` to generate the data.
@@ -43,8 +43,8 @@ If you want to generate data for your own domain, please refer to `generate_data
 
 ## Train your own DODA
 You can download the pretained DODA-ldm, and run `tool_add_control.py` to add the ControlNet to the model:
-    python tool_add_wheat_control.py
+        python tool_add_wheat_control.py
 
 the train the model by running:
-    python train_wheat.py
+        python train_wheat.py
 
