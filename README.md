@@ -33,7 +33,6 @@ python prepare_Terraref_testset.py
 ### Generate Images for Evaluation
 Generate images according to the bounding boxes of the COCO 2017 validation set:
     python generate_coco_testimg.py
-
 Generate images according to the bounding boxes and reference images of the Terraref domain:
     python prepare_Terraref_testset.py
 
