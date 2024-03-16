@@ -16,14 +16,16 @@ DODA is a data synthesizer that can generate high-quality object detection data 
 ## Evaluation
 
 ### Setup Environment
-```conda create -y -n DODA python=3.8.5
+```
+conda create -y -n DODA python=3.8.5
 conda activate DODA
 pip install torch==1.13.0+cu116 torchvision==0.14.0+cu116 --extra-index-url https://download.pytorch.org/whl/cu116
 pip install -r requirements.txt
 ```
 
 ### Prepare Datesets
-```bash Download_dataset.sh
+```
+bash Download_dataset.sh
 
 python prepare_coco.py
 python prepare_wheat_trainset.py   # If you only want to test the model`s performance on GWHD, there is no need to run this line
@@ -42,7 +44,9 @@ If you want to generate data for your own domain, please refer to `generate_data
 
 ## Train your own DODA
 You can download the pretained DODA-ldm, and run `tool_add_control.py` to add the ControlNet to the model:
-    python tool_add_wheat_control.py
+```python
+python tool_add_wheat_control.py
+```
 
 the train the model by running:
     python train_wheat.py
