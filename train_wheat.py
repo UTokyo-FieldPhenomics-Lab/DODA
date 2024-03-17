@@ -7,16 +7,16 @@ from cldm.model import create_model, load_state_dict, create_dataloader
 from pytorch_lightning import seed_everything
 
 
-# Configs
-#resume_path = './models/control_wheat_cosatt.ckpt'
+
 if __name__ == '__main__':
-    config = 'configs\latent-diffusion\DODA_wheat_ldm_kl_4.yaml'
-    logger_freq = 10000
+    # Configs
+    config = 'configs/controlnet/DODA_wheat_cldm_kl_4.yaml'
+    logger_freq = 5000
     max_steps = 80000
     sd_locked = True
     learning_rate = 1e-5
     accumulate_grad_batches = 1
-    resume_path = 'models/controlled_wheat.ckpt'
+    resume_path = 'models/control-wheat-ldm.ckpt'
     seed=23
 
     seed_everything(seed)

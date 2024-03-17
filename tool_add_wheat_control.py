@@ -1,10 +1,8 @@
-import sys
 import os
 
-assert len(sys.argv) == 3, 'Args are wrong.'
 
 input_path = 'models/DODA-wheat-ldm.ckpt'
-output_path = 'models/control_wheat.ckpt'
+output_path = 'models/control-wheat-ldm.ckpt'
 
 assert os.path.exists(input_path), 'Input model does not exist.'
 assert not os.path.exists(output_path), 'Output filename already exists.'
@@ -24,7 +22,7 @@ def get_node_name(name, parent_name):
     return True, name[len(parent_name):]
 
 
-model = create_model(config_path='./models/wheat_kl_4_cosatt.yaml')
+model = create_model(config_path='./configs/controlnet/DODA_wheat_cldm_kl_4.yaml')
 
 pretrained_weights = torch.load(input_path)
 if 'state_dict' in pretrained_weights:
