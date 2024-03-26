@@ -34,12 +34,12 @@ python prepare_Terraref_testset.py
 
 ### Generate Images for Evaluation
 Generate images according to the bounding boxes of the COCO 2017 validation set:
-First download the pretrained DODA-L2I to /models, then run:
+First download the pretrained DODA-L2I to `/models` folder, then run:
 ```
 python generate_coco_testimg.py
 ```
 Generate images according to the bounding boxes and reference images of the Terraref domain:
-First download the pretrained DODA to /models, then run:
+First download the pretrained DODA to `/models` folder, then run:
 ```
 python prepare_Terraref_testset.py
 ```
@@ -56,7 +56,7 @@ python wheat_gradio_box2image.py
 Please upload the reference image and layout image respectively as shown:
 ![web_example](figures/web_example.png)
 
-The reference image can be from any source. After preparing the data set, the layout image can be found in the /dataset folder, or you can simply draw it yourself through drawing software, below are some examples of possible layout images:
+The reference image can be from any source. After preparing the data set, the layout image can be found in the `/dataset` folder, or you can simply draw it yourself through drawing software, below are some examples of possible layout images:
 ![layout_example](figures/layout_example.png)
 
 ## Train your own DODA
