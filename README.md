@@ -1,6 +1,5 @@
 # DODA
 Official implementation of Diffusion for Object-detection Domain Adaptation in Agriculture
-
 DODA is a data synthesizer that can generate high-quality object detection data for new domains in agriculture, and help the detectors adapt to the new domains.
 
 ![overview of DODA](figures/Overview.jpg)
@@ -35,16 +34,30 @@ python prepare_Terraref_testset.py
 
 ### Generate Images for Evaluation
 Generate images according to the bounding boxes of the COCO 2017 validation set:
+First download the pretrained DODA-L2I to /models, then run:
 ```
 python generate_coco_testimg.py
 ```
 Generate images according to the bounding boxes and reference images of the Terraref domain:
+First download the pretrained DODA to /models, then run:
 ```
 python prepare_Terraref_testset.py
 ```
 
 If you want to generate data to train the detector, first generate layout images using `random_generate_layout_images.py`, then use `generate_data_for_target_domain.py` to generate the data.
 If you want to generate data for your own domain, please refer to `generate_data_for_target_domain.py`
+
+## Generate images in Web UI
+You can try our method to generate images for wheat through the Web UI: 
+```
+python wheat_gradio_box2image.py
+```
+
+Please upload the reference image and layout image respectively as shown:
+![web_example](figures/web_example.png)
+
+The reference image can be from any source. After preparing the data set, the layout image can be found in the /dataset folder, or you can simply draw it yourself through drawing software, below are some examples of possible layout images:
+![layout_example](figures/layout_example.png)
 
 ## Train your own DODA
 You can download the pretained DODA-ldm, and run `tool_add_control.py` to add the ControlNet to the model:
@@ -56,3 +69,4 @@ the train the model by running:
 ```
 python train_wheat.py
 ```
+
