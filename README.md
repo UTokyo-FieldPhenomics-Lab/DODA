@@ -56,10 +56,14 @@ You can try our method to generate images for wheat through the GUI:
 python wheat_gradio_box2image.py
 ```
 
-Please upload the reference image and layout image respectively as shown:
-![web_example](figures/web_example.png)
+Please upload <u>**BOTH**</u> the <u>**reference image**</u> and <u>**layout**</u> image respectively as shown:
 
-The reference image can be from any source. After preparing the data set, the layout image can be found in the `/dataset` folder, or you can simply draw it yourself through drawing software, below are some examples of possible layout images:
+![web_example](figures/web_example_en.png)
+
+> PS: The demo <u>**reference image**</u> and <u>**layout**</u> can be found in the `/dataset` folder 
+
+Or you can simply draw it yourself through drawing software. Each item should have a distinguishable color (with maximized values of the R, G, B channels), for example, `(0, 0, 255)`, `(255, 0, 255)`, etc. Below are some examples of possible layout images:
+
 ![layout_example](figures/layout_example.png)
 
 ## Train your own DODA
