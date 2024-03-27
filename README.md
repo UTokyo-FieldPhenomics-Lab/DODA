@@ -23,10 +23,13 @@ pip install torch==1.13.0+cu116 torchvision==0.14.0+cu116 --extra-index-url http
 pip install -r requirements.txt
 ```
 
-### Prepare Datesets
+### Download Datesets
 ```
 bash Download_dataset.sh
+```
 
+### Prepare Datesets
+```
 python prepare_coco.py
 python prepare_wheat_trainset.py   # If you only want to test the model`s performance on GWHD, there is no need to run this line
 python prepare_Terraref_testset.py
@@ -47,8 +50,8 @@ python prepare_Terraref_testset.py
 If you want to generate data to train the detector, first generate layout images using `random_generate_layout_images.py`, then use `generate_data_for_target_domain.py` to generate the data.
 If you want to generate data for your own domain, please refer to `generate_data_for_target_domain.py`
 
-## Generate images in Web UI
-You can try our method to generate images for wheat through the Web UI: 
+## Generate images in GUI
+You can try our method to generate images for wheat through the GUI: 
 ```
 python wheat_gradio_box2image.py
 ```
