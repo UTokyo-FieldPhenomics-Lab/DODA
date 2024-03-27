@@ -56,11 +56,11 @@ You can try our method to generate images for wheat through the GUI:
 python wheat_gradio_box2image.py
 ```
 
-Please upload <u>**BOTH**</u> the <u>**reference image**</u> and <u>**layout**</u> image respectively as shown:
+Please upload <u>**BOTH**</u> the <u>**reference image**</u> and <u>**layout image**</u> image respectively as shown:
 
-![web_example](figures/web_example_en.png)
+![web_example](figures/web_example.png)
 
-> PS: The demo <u>**reference image**</u> and <u>**layout**</u> can be found in the `/dataset` folder 
+> PS: The demo <u>**reference image**</u> and <u>**layout image**</u> can be found in the `/figures` folder. More images can be found in `/dataset` folder after run `prepare_wheat_trainset.py`
 
 Or you can simply draw it yourself through drawing software. Each item should have a distinguishable color (with maximized values of the R, G, B channels), for example, `(0, 0, 255)`, `(255, 0, 255)`, etc. Below are some examples of possible layout images:
 
