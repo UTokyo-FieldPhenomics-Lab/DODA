@@ -56,7 +56,7 @@ You can try our method to generate images for wheat through the GUI:
 python wheat_gradio_box2image.py
 ```
 
-Please upload the reference image and layout image respectively as shown:
+Please upload the **reference image** and **layout image** respectively as shown:
 ![web_example](figures/web_example.png)
 
 The reference image can be from any source. After preparing the data set, the layout image can be found in the `/dataset` folder, or you can simply draw it yourself through drawing software, below are some examples of possible layout images:
