@@ -1,5 +1,6 @@
 # DODA
 Official implementation of [Diffusion for Object-detection Domain Adaptation in Agriculture](http://arxiv.org/abs/2403.18334)
+
 DODA is a data synthesizer that can generate high-quality object detection data for new domains in agriculture, and help the detectors adapt to the new domains.
 
 ![overview of DODA](figures/Overview.jpg)
