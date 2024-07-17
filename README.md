@@ -76,6 +76,7 @@ Modify the `config` in `train_wheat.py` :
 config = 'configs/autoencoder/DODA_wheat_autoencoder_kl_64x64x3.yaml'
 ```
 Modify the `txt_file` and `data_root` in the config file to the path of the filenames txt file and the path to your own dataset.
+
 then train the VAE by running:
 ```
 python train_wheat.py
@@ -88,7 +89,9 @@ Modify the `config` in `train_wheat.py` :
 config = 'configs/latent-diffusion/DODA_wheat_ldm_kl_4.yaml'
 ```
 Modify the `ckpt_path` in the config file `DODA_wheat_ldm_kl_4.yaml` to the weight path of your VAE or the VAE provided by us.
+
 Modify the `txt_file` and `data_root` in the config file to the path of the filenames txt file and the path to your own dataset.
+
 then train the ldm by running:
 ```
 python train_wheat.py
@@ -107,6 +110,7 @@ Modify the `config` in `train_wheat.py` :
 config = 'configs/controlnet/DODA_wheat_cldm_kl_4.yaml'
 ```
 Modify the `txt_file` and `data_root` in the config file to the path of the filenames txt file and the path to your own dataset.
+
 then train the cldm by running:
 ```
 python train_wheat.py
