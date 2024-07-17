@@ -10,6 +10,7 @@ DODA is a data synthesizer that can generate high-quality object detection data 
 |:-:|:-:|:-:|:-:|:-:|
 |DODA-L2I|COCO|512x512|30K|[Google drive](https://drive.google.com/file/d/1Xm2gOA5QdtYyGQe6Lik-wXlyJTxFTc-F/view?usp=sharing)|
 |DODA-L2I|COCO|256x256|100K|[Google drive](https://drive.google.com/file/d/1l4bJfBRqa0gyLgqpj6Fw1jHsXenEIz15/view?usp=sharing)|
+|VAE|GWHD2021|256x256|170K|[Google drive](https://drive.google.com/file/d/1XHmtZR95uSbFcY-y6wCffgV5uUM1x8pC/view?usp=sharing)|
 |DODA|GWHD2021|256x256|80K|[Google drive](https://drive.google.com/file/d/1fR4yOhLDwTvyaP2l-TKi0iEApnXy60Lh/view?usp=sharing)|
 |DODA-ldm|GWHD2021|256x256|315K|[Google drive](https://drive.google.com/file/d/1pHsJBmC5D33W8zmZoJfrjcayIzatlpn4/view?usp=sharing)|
 
@@ -68,13 +69,49 @@ Or you can simply draw it yourself through drawing software. Each item should ha
 ![layout_example](figures/layout_example.png)
 
 ## Train your own DODA
-You can download the pretained DODA-ldm, and run `tool_add_control.py` to add the ControlNet to the model:
+DODA training is divided into three parts, from first to last: VAE, LDM and controlnet. This repository reads the data set through a txt file, so first, please write the file names of all the images in your own dataset into a txt file.
+### Training of VAE
+Modify the `config` in `train_wheat.py` :
 ```
-python tool_add_wheat_control.py
+config = 'configs/autoencoder/DODA_wheat_autoencoder_kl_64x64x3.yaml'
 ```
+Modify the `txt_file` and `data_root` in the config file to the path of the filenames txt file and the path to your own dataset.
+then train the VAE by running:
+```
+python train_wheat.py
+```
+VAE is very robust, so we recommend skipping VAE training and using the pre-trained weight `kl-f4-wheat.ckpt` we provide.
 
-the train the model by running:
+### Training of ldm
+Modify the `config` in `train_wheat.py` :
+```
+config = 'configs/latent-diffusion/DODA_wheat_ldm_kl_4.yaml'
+```
+Modify the `ckpt_path` in the config file `DODA_wheat_ldm_kl_4.yaml` to the weight path of your VAE or the VAE provided by us.
+Modify the `txt_file` and `data_root` in the config file to the path of the filenames txt file and the path to your own dataset.
+then train the ldm by running:
 ```
 python train_wheat.py
 ```
 
+### Training of cldm
+Modify the `input_path` in `tool_add_control.py` to the weight path of your ldm or the ldm provided by us, and modify `output_path` to specify the name of the output weight.
+Run `tool_add_control.py` to add the ControlNet to the ldm:
+```
+python tool_add_wheat_control.py
+```
+Modify the `config` in `train_wheat.py` :
+```
+config = 'configs/controlnet/DODA_wheat_cldm_kl_4.yaml'
+```
+Modify the `txt_file` and `data_root` in the config file to the path of the filenames txt file and the path to your own dataset.
+then train the cldm by running:
+```
+python train_wheat.py
+```
+
+### Hyperparameters for training
+![Hyperparameters](figures/Hyperparameters.png)
+
+### Training tips
+Diffusion model is data hungry, and using more data always gives better results, so we strongly recommend mixing your data with GWHD for training. Mixing data can be achieved by putting all the images in your own dataset and the GWHD into one folder and writing the filenames of all images to one txt file.
