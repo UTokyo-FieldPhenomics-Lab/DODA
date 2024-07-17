@@ -100,6 +100,7 @@ Run `tool_add_control.py` to add the ControlNet to the ldm:
 ```
 python tool_add_wheat_control.py
 ```
+Modify the `resume_path` in `train_wheat.py` to the path of the output weight.
 Modify the `config` in `train_wheat.py` :
 ```
 config = 'configs/controlnet/DODA_wheat_cldm_kl_4.yaml'
