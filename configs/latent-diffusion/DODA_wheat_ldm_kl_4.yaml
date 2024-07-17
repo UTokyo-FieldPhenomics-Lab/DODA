@@ -1,5 +1,5 @@
 model:
-  target: ldm.models.diffusion.ddpm.LatentDiffusion
+  target: ldm.models.diffusion.ldm_ddpm.LatentDiffusion
   params:
     linear_start: 0.0015
     linear_end: 0.0155
@@ -72,12 +72,16 @@ data:
     train:
       target: utils.wheat_dataset.wheatUnconditionalTrain
       params:
+        txt_file: "datasets/wheat/train_ldm.txt"
+        data_root: "datasets/wheat"
         ag_rate: 0.8
         flip_p: 0.5
         size: 256
     validation:
       target: utils.wheat_dataset.wheatUnconditionalValidation
       params:
+        txt_file: "datasets/wheat/val_ldm.txt"
+        data_root: "datasets/wheat"
         ag_rate: 0
         flip_p: 0
         size: 256
