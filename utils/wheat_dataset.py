@@ -282,10 +282,10 @@ class WheatConditionaltBase(Dataset):
         return dict(jpg=target, hint=source, reference=reference)
 
 class wheatConditionalTrain(WheatConditionaltBase):
-    def __init__(self, **kwargs):
-        super().__init__(txt_file="datasets/wheat/train_cldm.txt", data_root="datasets/wheat", **kwargs)
+    def __init__(self, txt_file="datasets/wheat/train_cldm.txt", data_root="datasets/wheat", **kwargs):
+        super().__init__(txt_file=txt_file, data_root=data_root, **kwargs)
 
 
 class wheatConditionalValidation(WheatConditionaltBase):
-    def __init__(self, flip_p=0.,ag_rate=0., **kwargs):
-        super().__init__(txt_file="datasets/wheat/val_cldm.txt", data_root="datasets/wheat", **kwargs)
+    def __init__(self, txt_file="datasets/wheat/val_cldm.txt", data_root="datasets/wheat", **kwargs):
+        super().__init__(txt_file=txt_file, data_root=data_root, **kwargs)
