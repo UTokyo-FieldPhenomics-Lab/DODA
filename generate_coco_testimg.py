@@ -1,12 +1,13 @@
 import cv2
+import os
+
 import einops
 import numpy as np
 import torch
 
 from pytorch_lightning import seed_everything
 from cldm.model import create_model, load_state_dict
-from cldm.ddim_hacked import DDIMSampler
-from utils.utils import makedir
+from DODA.sampler import eulerSampler
 
 
 #Path of COCO
@@ -15,20 +16,25 @@ dataDir = 'datasets/coco'
 output_path = 'output/coco/'
 weight = 'models/DODA-L2I-coco-512.ckpt'
 
+strength = 1.5
+cfg_scale = 4.5
+
 seed = 21
-batch_size = 8
+batch_size = 4
 image_resolution = 512
+sample_step = 100
+
 configs = 'configs/controlnet/coco_512.yaml'
 
-layout_img_path = '{}/images/80_colors/val2017/'.format(dataDir)
-prompt_path = '{}/annotations/coco_prompts_val2017.txt'.format(dataDir)
+layout_img_path = f'{dataDir}/images/80_colors/val2017/'
+prompt_path = f'{dataDir}/annotations/coco_prompts_val2017.txt'
 
 seed_everything(seed)
-makedir(output_path)
+os.makedirs(output_path, exist_ok=True)
 
 
 
-def process(control, prompt_lst, ddim_steps=50, guess_mode=False, strength=1.5, scale=7.5, eta=0.0):
+def process(control, prompt_lst, scale=4.5):
     with torch.no_grad():
         
         B, H, W, C = control.shape
@@ -40,15 +46,12 @@ def process(control, prompt_lst, ddim_steps=50, guess_mode=False, strength=1.5, 
         prompt_lst = torch.cat(prompt_lst, dim=0)
 
         cond = {"c_concat": [control], "c_crossattn": [prompt_lst]}
-        un_cond = {"c_concat": None if guess_mode else [control], "c_crossattn": [model.get_learned_conditioning([''] * B)]}
+        un_cond = {"c_concat": [torch.zeros_like(control).cuda()], "c_crossattn": [model.get_learned_conditioning([''] * B)]}
 
-        shape = (4, H // 8, W // 8)
+        shape = (B, 3, H // 8, W // 8)
 
-        model.control_scales = [strength * (0.825 ** float(12 - i)) for i in range(13)] if guess_mode else ([strength] * 13)  # Magic number. IDK why. Perhaps because 0.825**12<0.01 but 0.826**12>0.01
-        samples, intermediates = ddim_sampler.sample(ddim_steps, B,
-                                                     shape, cond, verbose=False, eta=eta,
-                                                     unconditional_guidance_scale=scale,
-                                                     unconditional_conditioning=un_cond)
+        samples = sampler.sample_euler(shape=shape, c=cond, 
+                                 unconditional_guidance_scale=scale, unconditional_conditioning=un_cond)
 
         x_samples = model.decode_first_stage(samples)
         x_samples = (einops.rearrange(x_samples, 'b c h w -> b h w c') * 127.5 + 127.5).cpu().numpy().clip(0, 255).astype(np.uint8)
@@ -60,8 +63,14 @@ def process(control, prompt_lst, ddim_steps=50, guess_mode=False, strength=1.5, 
 
 model = create_model(configs).cpu()
 model.load_state_dict(load_state_dict(weight, location='cuda'))
+
+if strength==0:
+    model.control_scales = None
+    model.control_model = None
+else:
+    model.control_scales = ([strength] * 13)
 model = model.cuda()
-ddim_sampler = DDIMSampler(model)
+sampler = eulerSampler(model, sample_step)
 
 
 # read prompts
@@ -88,7 +97,7 @@ for i in range(0, len(imgnames_list), batch_size):
     # Stack images in batch dimension
     control_images = np.stack(control_images, axis=0)
 
-    out_imgs = process(control_images, prompt_lst)
+    out_imgs = process(control_images, prompt_lst, scale=cfg_scale)
     for n, out_img in enumerate(out_imgs):
         out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
         cv2.imwrite(output_path + batch_imgnames[n], out_img)
