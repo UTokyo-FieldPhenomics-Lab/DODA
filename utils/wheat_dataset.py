@@ -4,7 +4,7 @@ import os
 import random
 
 from torch.utils.data import Dataset
-from transformers import AutoImageProcessor
+from transformers import CLIPImageProcessor
 
 
 
@@ -32,7 +32,7 @@ class WheatUnconditionaltBase(Dataset):
 
         self.flip = flip_p
         self.ag_rate = ag_rate
-        self.image_processor = AutoImageProcessor.from_pretrained("facebook/vit-mae-base")
+        self.image_processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch16")
         self.crop_size = crop_size
         
 
@@ -113,7 +113,7 @@ class WheatUnconditionaltBase(Dataset):
             image = cv2.resize(image, (self.size, self.size))
         except:
             image = cv2.resize(image_cp, (self.size, self.size))
-            print("file_path_")
+            print(example["file_path_"])
             print(x_max, x_min, y_max, y_min)
             
 
@@ -168,7 +168,7 @@ class WheatConditionaltBase(Dataset):
         self.flip = flip_p
         self.ag_rate = ag_rate
         self.shuffle_c = shuffle_channel
-        self.image_processor = AutoImageProcessor.from_pretrained("facebook/vit-mae-base")
+        self.image_processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch16")
         self.crop_size = crop_size
 
     def __len__(self):

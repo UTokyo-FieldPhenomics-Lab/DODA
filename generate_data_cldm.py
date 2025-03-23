@@ -35,7 +35,7 @@ n_img = 800   # The number of images that need to be generated
 seed = 21
 batch_size = 8
 img_resolution = 512
-configs = 'configs/controlnet/DODA_wheat_cldm_kl_4.yaml'
+configs = 'configs/controlnet/wheat_cldm_kl_4.yaml'
 weight = "models/DODA-wheat-cldm.ckpt"
 
 

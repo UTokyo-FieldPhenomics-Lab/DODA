@@ -5,7 +5,6 @@ import colorsys
 import inflect
 from tqdm import tqdm
 from pycocotools.coco import COCO
-from utils.utils import makedir
 
 #Path of COCO
 dataDir = 'datasets/coco'
@@ -22,7 +21,7 @@ for dataType in dataTypes:
     coco = COCO(annFile)
 
     output_path = '{}/images/80_colors/{}/'.format(dataDir, dataType)
-    makedir(output_path)
+    os.makedirs(output_path, exist_ok=True)
 
     # Get category information
     categories = coco.loadCats(coco.getCatIds())

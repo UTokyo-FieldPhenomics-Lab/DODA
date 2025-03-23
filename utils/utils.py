@@ -1,6 +1,7 @@
 import os
 import csv
 import cv2
+from PIL import Image
 import numpy as np
 import networkx as nx
 
@@ -8,9 +9,61 @@ import torch
 import torch.nn as nn
 import pytorch_lightning as pl
 
-from typing import Dict
 from torch.utils.data import DataLoader
 from ldm.util import instantiate_from_config
+
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+
+
+def visualize_and_save_features_pca(feats_map, t, save_dir, layer_idx):
+    """
+    feats_map: [B, N, D]
+    """
+    B = len(feats_map)
+    feats_map = feats_map.flatten(0, -2)
+    feats_map = feats_map.cpu().numpy()
+    pca = PCA(n_components=3)
+    pca.fit(feats_map)
+    feature_maps_pca = pca.transform(feats_map)  # N X 3
+    feature_maps_pca = feature_maps_pca.reshape(B, -1, 3)  # B x (H * W) x 3
+    for i, experiment in enumerate(feature_maps_pca):
+        pca_img = feature_maps_pca[i]  # (H * W) x 3
+        h = w = int(np.sqrt(pca_img.shape[0]))
+        pca_img = pca_img.reshape(h, w, 3)
+        pca_img_min = pca_img.min(axis=(0, 1))
+        pca_img_max = pca_img.max(axis=(0, 1))
+        pca_img = (pca_img - pca_img_min) / (pca_img_max - pca_img_min)
+        pca_img = Image.fromarray((pca_img * 255).astype(np.uint8))
+        pca_img = pca_img.resize((512, 512))
+        pca_img.save(os.path.join(save_dir, f"{i}_time_{t}_layer_{layer_idx}.png"))
+
+def visualize_and_save_features_kmean(feats_map, save_dir, key_word=''):
+
+    B = len(feats_map)
+    feats_map = feats_map.flatten(0, -2)
+    feats_map = feats_map.cpu().numpy()
+
+    # K-means 聚类
+    n_clusters = 3  # 簇数
+    kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init='auto')
+    kmeans.fit(feats_map)
+
+    # 聚类标签
+    labels = kmeans.labels_
+
+    h = w = int(np.sqrt(labels.shape[0]))
+
+    # 重塑回空间维度
+    clustered_map = labels.reshape(h, w)
+
+    clustered_map += 1
+    clustered_map *= 50
+    clustered_map += 50
+    clustered_map = Image.fromarray(clustered_map.astype(np.uint8))
+    clustered_map = clustered_map.resize((512, 512))
+    clustered_map.save(os.path.join(save_dir, f"{key_word}_kmean{h}.png"))
 
 
 def DataloaderFromConfig(batch_size, train=None, validation=None,
@@ -32,18 +85,6 @@ def read_label(csv_label_path, label_dic={}):
             continue
         label_dic[item[0]] = [item[-2], item[-1]]
     return label_dic
-
-def makedir(path):
-    # Split the path into directories at each level according to '/'
-    path_parts = path.split('/')
-    current_path = ''
-    # Determine whether the path exists step by step, and create it if it does not exist
-    for part in path_parts:
-        # Splice the current path with the current level directory
-        current_path = os.path.join(current_path, part)
-        # If the current path does not exist, create it
-        if not os.path.exists(current_path):
-            os.makedirs(current_path)
 
 def is_overlaped(array_1, array_2):
     x_min, y_min, x_max, y_max = array_2[0]
@@ -156,16 +197,23 @@ def get_layout_image(img, laBel):
         box_img_lay_2 = np.zeros((h, w, 1), dtype=np.uint8)
         box_img_lay_3 = np.zeros((h, w, 1), dtype=np.uint8)
 
-        if box_lay_1.shape[0] > 1:
+        used_box = set()
+
+        if box_lay_1.shape[0] > 0:
             for bbox in box_lay_1:
-                cv2.rectangle(box_img_lay_1, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255), -1)
-        if box_lay_2.shape[0] > 1:
+                if tuple(bbox) not in used_box:
+                    cv2.rectangle(box_img_lay_1, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255), -1)
+                    used_box.add(tuple(bbox))
+        if box_lay_2.shape[0] > 0:
             for bbox in box_lay_2:
-                cv2.rectangle(box_img_lay_2, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255), -1)
-        if box_lay_3.shape[0] > 1:
+                if tuple(bbox) not in used_box:
+                    cv2.rectangle(box_img_lay_2, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255), -1)
+                    used_box.add(tuple(bbox))
+        if box_lay_3.shape[0] > 0:
             for bbox in box_lay_3:
-                if bbox not in box_lay_2:
-                    cv2.rectangle(box_img_lay_3, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255), -1)        
+                if tuple(bbox) not in used_box:
+                    cv2.rectangle(box_img_lay_3, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255), -1)   
+                    used_box.add(tuple(bbox))
                 
         source_img = np.concatenate((box_img_lay_1, box_img_lay_2, box_img_lay_3), axis=2)
 

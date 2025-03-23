@@ -1,5 +1,3 @@
-from share import *
-
 import cv2
 import einops
 import gradio as gr
@@ -13,7 +11,7 @@ from cldm.ddim_hacked import DDIMSampler
 from transformers import AutoImageProcessor
 
 
-model = create_model('configs/controlnet/DODA_wheat_cldm_kl_4.yaml').cpu()
+model = create_model('configs/controlnet/wheat_cldm_kl_4.yaml').cpu()
 model.load_state_dict(load_state_dict("models/DODA-wheat-cldm.ckpt", location='cuda'))
 
 

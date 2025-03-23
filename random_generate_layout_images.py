@@ -7,7 +7,7 @@ import random
 import numpy as np
 import networkx as nx
 from tqdm import tqdm
-from utils.utils import makedir, is_overlaped
+from utils.utils import is_overlaped
 
 
 
@@ -234,7 +234,7 @@ def generate_random_wh(base_w, base_h, w_scale, h_scale, n):
 
 
 box_img_path = output_path + 'img/'
-makedir(box_img_path)
+os.makedirs(box_img_path, exist_ok=True)
 file = open(output_path + 'bounding_boxes.txt', 'w')
 
 if use_wh_from_target_domain:

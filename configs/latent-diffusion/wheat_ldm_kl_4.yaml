@@ -19,7 +19,7 @@ model:
     scheduler_config: # 10000 warmup steps
       target: ldm.lr_scheduler.LambdaLinearScheduler
       params:
-        warm_up_steps: [5000]
+        warm_up_steps: [10000]
         cycle_lengths: [10000000000000]
         f_start: [1.e-6]
         f_max: [1.]
@@ -62,7 +62,7 @@ model:
           target: torch.nn.Identity
 
     cond_stage_config:
-      target: ldm.modules.encoders.modules.FrozenViTMAE
+      target: ldm.modules.encoders.modules.FrozenViTCLIP
 
 data:
   target: utils.utils.DataloaderFromConfig
@@ -98,4 +98,3 @@ lightning:
 
   trainer:
     benchmark: True
-    max_steps: 315000

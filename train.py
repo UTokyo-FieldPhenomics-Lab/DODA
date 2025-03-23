@@ -1,5 +1,3 @@
-from share import *
-
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from cldm.logger import ImageLogger
@@ -10,13 +8,13 @@ from pytorch_lightning import seed_everything
 
 if __name__ == '__main__':
     # Configs
-    config = 'configs/controlnet/DODA_wheat_cldm_kl_4.yaml'
+    config = 'configs/DODA/DODA_wheat_ldm_kl_4_layout_clip.yaml'
     logger_freq = 5000
     max_steps = 80000
     sd_locked = True
     learning_rate = 1e-5
     accumulate_grad_batches = 1
-    resume_path = 'models/control-wheat-ldm.ckpt'
+    resume_path = 'models/DODA-wheat-resnet.ckpt'
     seed=23
 
     seed_everything(seed)
@@ -35,9 +33,9 @@ if __name__ == '__main__':
     model.learning_rate = learning_rate
 
     checkpoint_callback = ModelCheckpoint(
-        dirpath='logs/ab1/wo_ter',
-        filename='{epoch:02d}-{step}',
-        save_weights_only= False,
+        dirpath='logs/DODA',
+        filename='{step}',
+        save_weights_only= True,
         save_top_k=1,  # Only save the latest checkpoint
     )
 
