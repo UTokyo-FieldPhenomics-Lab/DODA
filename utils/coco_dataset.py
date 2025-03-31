@@ -4,7 +4,6 @@ import os
 import random
 
 from torch.utils.data import Dataset
-from transformers import AutoImageProcessor
 
 
 
@@ -35,7 +34,6 @@ class cocoConditionaltBase(Dataset):
         
         self.size = size
         self.flip = flip_p
-        self.image_processor = AutoImageProcessor.from_pretrained("facebook/vit-mae-base")
 
     def __len__(self):
         return self._length

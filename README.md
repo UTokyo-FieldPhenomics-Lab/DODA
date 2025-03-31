@@ -3,7 +3,7 @@
 
 DODA is a data synthesizer that can generate high-quality object detection data for new domains in agriculture, and help the detectors adapt to the new domains.
 
-![overview of DODA](figures/DODA_overview)
+![overview of DODA](figures/DODA_overview.png)
 
 ## Pretrained Models
 | Model | Dataset | Resolution | Training Iters | Downlad Link |
