@@ -11,10 +11,10 @@ from DODA.sampler_layout import eulerSampler
 from transformers import CLIPImageProcessor
 
 
-cfg_scale = 1
-strength = 1.25
+cfg_scale = 1.5
+strength = 1
 
-target_domain = 'KSU_1'
+target_domain = 'ARC_1'
 n_img_per_domain = 200
 
 
@@ -32,14 +32,14 @@ start_no_img = 0   # from which layout image to start
 
 scale = img_resolution/512
 
-output_path = f'/output/{target_domain}/cfg{cfg_scale}_strength{strength}/'
+output_path = f'output/{target_domain}/cfg{cfg_scale}_strength{strength}/'
 os.makedirs(output_path, exist_ok=True)
 
 data_path = 'datasets/wheat/'
 
 ref_img_path = data_path + 'target/'
-layout_path = f'{data_path}/random_layout/{target_domain}'
-reference_infor_path = f'{data_path}/reference_infor/{target_domain}'
+layout_path = f'{data_path}/random_layout/'
+reference_infor_path = f'{data_path}/reference_infor/'
 labels_of_generated_img = open(f'{output_path}/bounding_boxes.txt', 'w')
 
 

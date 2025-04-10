@@ -48,7 +48,7 @@ def process(control, prompt_lst, scale=4.5):
         cond = {"c_concat": [control], "c_crossattn": [prompt_lst]}
         un_cond = {"c_concat": [torch.zeros_like(control).cuda()], "c_crossattn": [model.get_learned_conditioning([''] * B)]}
 
-        shape = (B, 3, H // 8, W // 8)
+        shape = (B, 4, H // 8, W // 8)
 
         samples = sampler.sample_euler(shape=shape, c=cond, 
                                  unconditional_guidance_scale=scale, unconditional_conditioning=un_cond)
