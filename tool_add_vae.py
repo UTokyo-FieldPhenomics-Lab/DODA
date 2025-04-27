@@ -23,7 +23,7 @@ def get_node_name(name, parent_name):
     return True, name[len(parent_name):]
 
 
-model = create_model(config_path='./configs/controlnet/wheat_cldm_kl_4.yaml')
+model = create_model(config_path='./configs/controlnet/coco_train.yaml')
 
 orginal_weight = torch.load(orginal_weight_path)
 trained_weight = torch.load(trained_weight_path)
