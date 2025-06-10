@@ -98,10 +98,10 @@ python train.py
 ### Training of L2I
 Modify the `config` in `train.py` :
 ```
-config = 'configs/controlnet/DODA_wheat_ldm_kl_4_layout_clip.yaml'
+config = 'configs/DODA/DODA_wheat_ldm_kl_4_layout_clip.yaml'
 ```
 Modify the `resume_path` in `train.py` to the weight path of your ldm or the ldm provided by us.
-Modify the `txt_file` and `data_root` in the config file to the path of the filenames txt file and the path to your own dataset.
+Modify the `txt_file` and `data_root` in the config file to the path of the filenames of conditioned .txt files (e.g., train_cldm.txt and val_cldm.txt) and the path to your own dataset.
 then train the cldm by running:
 ```
 python train.py
