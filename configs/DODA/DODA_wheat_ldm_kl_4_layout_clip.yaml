@@ -82,7 +82,7 @@ data:
     batch_size: 16
     num_workers: 4
     train:
-      target: utils.wheat_dataset_correct.wheatConditionalTrain
+      target: utils.wheat_dataset.wheatConditionalTrain
       params:
         txt_file: "datasets/wheat/train_cldm.txt"
         data_root: "datasets/wheat"
@@ -90,7 +90,7 @@ data:
         flip_p: 0.5
         size: 256
     validation:
-      target: utils.wheat_dataset_correct.wheatConditionalValidation
+      target: utils.wheat_dataset.wheatConditionalValidation
       params:
         txt_file: "datasets/wheat/val_cldm.txt"
         data_root: "datasets/wheat"
